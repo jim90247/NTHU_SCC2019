@@ -80,11 +80,35 @@ Restart network.
 
 	systemctl restart network
 
-.. note::
-	I'm not sure about how to enable connected mode in ``systemd-networkd``.
+systemd-networkd
+^^^^^^^^^^^^^^^^
 
-.. warning::
-	If we are using ifconfig and systemd-networkd, make sure the network config files does not conflict.
+Create a config file in ``/etc/systemd/network``.
+::
+
+	[Match]
+	Name=ib0
+
+	[Network]
+	Address=10.18.18.1/24
+
+Restart ``systemd-networkd``.
+::
+
+	systemctl restart systemd-networkd
+
+To enable connected mode, we can use this `AUR package`_. Remove the ``rdma.service`` dependency in ``ipoibmodemtu.service``, since we are using Mellanox's driver.
+
+.. _AUR package: https://aur.archlinux.org/packages/ipoibmodemtu/
+
+Copy the files to their specified path, then start systemd service.
+::
+
+	cp ipoibmodemtu /usr/bin/ipoibmodemtu
+	cp ipoibmodemtu.conf /etc/ipoibmodemtu.conf
+	cp ipoibmodemtu.service /usr/lib/systemd/system/ipoibmodemtu.service
+	systemctl daemon-reload
+	systemctl enable ipoibmodemtu.service --now
 
 Mellanox OFED GPUDirect RDMA
 ============================
