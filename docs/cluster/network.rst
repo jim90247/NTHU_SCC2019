@@ -105,8 +105,6 @@ NAT
 
 After setting up the network, you might found that worker nodes cannot access internet (only master node can). What you need is to set up NAT service *on master node*.
 
-Here we use ``firewalld`` to serve as the NAT service and also protect our server from abnormal access.
-
 .. important::
 	Perform following operations on **master node** only.
 
@@ -127,6 +125,36 @@ Add firewall rules.
 	firewall-cmd --permanent --zone=trusted --add-source=10.18.0.0/24
 	firewall-cmd --permanent --zone=trusted --add-source=10.18.18.0/24 # IPoIB
 	
+nftables
+========
+
+This is an alternative method of using ``firewalld``.
+
+Install ``nftables``.
+::
+
+	yum install nftables
+
+Add SNAT (source NAT) rules.
+
+::
+
+	# create table with chains
+	nft add table nat
+	nft add chain nat prerouting { type nat hook prerouting priority 0 \; }
+	nft add chain nat postrouting { type nat hook postrouting priority 100 \; }
+	
+	# add rule
+	nft add rule nat postrouting ip saddr 10.18.0.0/24 oif enp1s0f1 snat <public IP>
+
+Make settings become permanent.
+::
+
+	systemctl enable nftables --now
+	
+	# After configuring above rules
+	nft list ruleset >> /etc/sysconfig/nftables.conf
+
 sysctl
 ^^^^^^
 
