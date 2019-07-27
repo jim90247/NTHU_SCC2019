@@ -116,3 +116,30 @@ Configuration file: ``/etc/ansible/hosts``.
 	[worker]
 	node1 ansible_ssh_host=10.18.0.1
 	node2 ansible_ssh_host=10.18.0.2
+
+Clustershell
+============
+
+Clustershell is another tool to manage multiple cluster nodes.
+
+Install from yum
+::
+
+	yum install clustershell
+
+Cluster node group configuration file: ``/etc/clustershell/groups.d/local.cfg``.
+::
+
+	all: art[1-4]
+	master: art1
+	worker: art[2-4]
+
+To execute a command for certain group, run
+::
+
+	# clush -w @<group> [-b [--diff]] [-L] <command>
+	clush -w @worker -b --diff "rpm -qa | sort"
+
+``-b`` buffers output from each node, output all results after all nodes finish execution. ``--diff`` can compare the results of each node.
+``-L`` will show outputs in the order of machines' name.
+
