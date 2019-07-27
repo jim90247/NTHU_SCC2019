@@ -127,7 +127,7 @@ Install using ``rpm``.
 ::
 
 	rpmbuild --rebuild /tmp/nvidia_peer_memory-*.src.rpm
-	rpm -ivh $HOME/rpmbuild/RPMS/x86_64/nvidia_peer_memory-*-.x86_64.rpm
+	rpm -ivh $HOME/rpmbuild/RPMS/x86_64/nvidia_peer_memory-*.x86_64.rpm
 
 Start system service.
 ::
