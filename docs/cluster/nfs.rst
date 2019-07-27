@@ -35,8 +35,8 @@ Client
 Mount NFS file systems. Edit ``/etc/fstab``.
 ::
 
-	10.18.0.1:/home /home nfs4 soft,intr,bg 0 0
-	10.18.0.1:/opt /opt nfs4 soft,intr,bg 0 0
+	10.18.0.1:/home /home nfs4 nofail,soft,intr,bg 0 0
+	10.18.0.1:/opt /opt nfs4 nofail,soft,intr,bg 0 0
 	
 Activate the mount settings.
 ::
