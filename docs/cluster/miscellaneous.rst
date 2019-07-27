@@ -122,7 +122,7 @@ Clustershell
 
 Clustershell is another tool to manage multiple cluster nodes.
 
-Install from yum
+Install from yum.
 ::
 
 	yum install clustershell
@@ -140,6 +140,7 @@ To execute a command for certain group, run
 	# clush -w @<group> [-b [--diff]] [-L] <command>
 	clush -w @worker -b --diff "rpm -qa | sort"
 
-``-b`` buffers output from each node, output all results after all nodes finish execution. ``--diff`` can compare the results of each node.
-``-L`` will show outputs in the order of machines' name.
 
+* ``-b`` buffers output from each node, output all results after all nodes finish execution. 
+* ``--diff`` can compare the results of each node.
+* ``-L`` will show outputs in the order of machines' name.
