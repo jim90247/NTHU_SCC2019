@@ -126,7 +126,7 @@ Add firewall rules.
 	firewall-cmd --permanent --zone=trusted --add-source=10.18.18.0/24 # IPoIB
 	
 nftables
-========
+^^^^^^^^
 
 This is an alternative method of using ``firewalld``.
 
