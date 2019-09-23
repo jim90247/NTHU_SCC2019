@@ -13,3 +13,4 @@ This is a document about the cluster system we use at NTHU and competition.
 	nis
 	package-manager
 	infiniband
+	parallel-fs

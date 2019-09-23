@@ -164,3 +164,6 @@ Add ``net.ipv4.ip_forward=1`` into ``/etc/sysctl.conf``. Then do
 	sysctl -p
 	
 to reload sysctl settings.
+
+.. note::
+	If NAT is not working and ``libvirtd`` is enabled, try disabling ``libvirtd`` (it uses iptables).
