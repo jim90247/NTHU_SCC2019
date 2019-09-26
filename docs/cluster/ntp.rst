@@ -40,9 +40,38 @@ Finally, enable and start service.
 Worker
 ======
 
-Workers can use ``ntpdate`` to synchronize time with master.
+We use **chrony** as an replacement of *ntpdate*.
+
+Install chrony.
 ::
 
-	ntpdate <server IP>
-	
-If we want to sync with master periodically, we can put it into ``crontab``.
+    yum install chrony -y
+
+Edit config file ``/etc/chrony.conf``. Adjust NTP servers we would like to use. Here we use the master node of our cluster as NTP server.
+::
+    ...
+    server 10.18.0.1
+    ...
+
+Start system service.
+::
+
+    systemctl start chronyd --now
+
+Check synchronization status with NTP server.
+::
+
+    $ chronyc tracking
+    Reference ID    : 0A130001 (10.18.0.1)
+    Stratum         : 12
+    Ref time (UTC)  : Thu Sep 26 18:48:33 2019
+    System time     : 0.000000531 seconds fast of NTP time
+    Last offset     : +0.000004994 seconds
+    RMS offset      : 0.000088117 seconds
+    Frequency       : 0.086 ppm fast
+    Residual freq   : +0.001 ppm
+    Skew            : 0.076 ppm
+    Root delay      : 0.000194579 seconds
+    Root dispersion : 0.010986784 seconds
+    Update interval : 64.9 seconds
+    Leap status     : Normal
