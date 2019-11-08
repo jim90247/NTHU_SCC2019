@@ -56,7 +56,7 @@ Edit config file ``/etc/chrony.conf``. Adjust NTP servers we would like to use. 
 Start system service.
 ::
 
-    systemctl start chronyd --now
+    systemctl enable chronyd --now
 
 Check synchronization status with NTP server.
 ::
