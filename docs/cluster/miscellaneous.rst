@@ -11,7 +11,7 @@ Temporarily disable SELinux:
 
 	setenforce 0
 
-To permanently disable SELinux, edit ``/etc/sysconfig/selinux``.
+To permanently disable SELinux, edit ``/etc/sysconfig/selinux`` and ``/etc/selinux/config``.
 ::
 
 	SELINUX=disabled
@@ -40,12 +40,12 @@ Generate ssh key.
 	ssh-keygen
 	# Press Enter to the end.
 	# ssh-keygen -t <key_type> if you want to use methods other than RSA.
-	
+
 For nodes we want to login without password, copy our public key to those nodes.
 ::
 
 	ssh-copy-id <node>
-	
+
 After copy, try ssh to that node. See if password is still required.
 
 .. note::
@@ -61,7 +61,7 @@ Getting current limit settings:
 
 	ulimit -Ss # soft limit
 	ulimit -Hs # hard limit
-	
+
 * soft limit: user can change it by himself/herself.
 * hard limit: only root can change.
 
@@ -99,7 +99,7 @@ Create RAID.
 
 	# mdadm --create /dev/mdxxx --level=[RAID level] --raid-devices=[# of disks] /dev/sda /dev/sdb ...
 	mdadm --create /dev/md127 --level=0 --raid-devices=2 /dev/sda /dev/sdb
-	
+
 Ansible
 =======
 
@@ -109,7 +109,7 @@ Install from yum.
 ::
 
 	yum install ansible
-	
+
 Configuration file: ``/etc/ansible/hosts``.
 ::
 
