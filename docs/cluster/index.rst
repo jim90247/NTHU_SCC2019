@@ -10,7 +10,7 @@ This is a document about the cluster system we use at NTHU and competition.
 	ntp
 	miscellaneous
 	nfs
-	nis
+	minos
 	package-manager
 	infiniband
 	parallel-fs
