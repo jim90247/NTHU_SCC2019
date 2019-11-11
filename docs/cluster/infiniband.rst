@@ -117,6 +117,11 @@ Not included in Mellanox driver. Get the source from github.
 ::
 
 	git clone https://github.com/Mellanox/nv_peer_memory.git
+    git checkout d9a0a126bc31279e63e4b47bfb59ee767cea7aad
+
+.. caution::
+    As of 11/11/2019, we found the latest version of nv_peer_mem will fail on our cluster (*art*). That's why we use an older commit.
+
 
 Build kernel module.
 ::
