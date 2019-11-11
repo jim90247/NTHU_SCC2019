@@ -15,7 +15,7 @@ Update packages. If no ``package_name`` is specified, all packages will be updat
 ::
 
 	yum update [package_name]
-	
+
 Some useful repository
 ======================
 
@@ -36,6 +36,9 @@ This repository contains packages newer than CentOS-Base repository. (e.g. tmux2
 
 	yum install https://centos7.iuscommunity.org/ius-release.rpm
 
+.. note::
+	You can also copy ``art:/etc/yum.repos.d`` (the whole directory) to our cluster and remove unused repositories.
+
 Local repository
 ================
 
@@ -53,7 +56,7 @@ Synchronize packages on mirror sites to local.
 ::
 
 	reposync --gpgcheck -l --repoid=<repo> --downloadcomps --download-metadata -a x86_64 --newest-only
-	
+
 Set up repository information.
 ::
 
@@ -77,10 +80,10 @@ Repository configurations locate at ``/etc/yum.repos.d``. Changes the ``baseurl`
 	name=CentOS-$releasever - Base
 	baseurl=http://localhost/base/
 	gpgcheck=0
-	
+
 .. note::
 	If we want to disable *fastest mirror* plugin (all repositories are local), we can edit ``/etc/yum/pluginconf.d/fastestmirror.conf``.
-	
+
 	::
-	
+
 		enabled=0

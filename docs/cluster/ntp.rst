@@ -12,7 +12,7 @@ Install NTP package.
 ::
 
 	yum install ntp
-	
+
 Master
 ======
 
@@ -31,12 +31,12 @@ If master node cannot access internet, we have to set up our own local NTP serve
 
 	server 127.127.1.0
 	fudge 127.127.1.0 stratum 10
-	
+
 Finally, enable and start service.
 ::
 
 	systemctl enable ntpd --now
-	
+
 Worker
 ======
 
@@ -50,7 +50,7 @@ Install chrony.
 Edit config file ``/etc/chrony.conf``. Adjust NTP servers we would like to use. Here we use the master node of our cluster as NTP server.
 ::
     ...
-    server 10.18.0.1
+    server 10.19.0.1
     ...
 
 Start system service.
@@ -62,7 +62,7 @@ Check synchronization status with NTP server.
 ::
 
     $ chronyc tracking
-    Reference ID    : 0A130001 (10.18.0.1)
+    Reference ID    : 0A130001 (10.19.0.1)
     Stratum         : 12
     Ref time (UTC)  : Thu Sep 26 18:48:33 2019
     System time     : 0.000000531 seconds fast of NTP time

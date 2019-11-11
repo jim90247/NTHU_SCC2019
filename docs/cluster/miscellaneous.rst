@@ -26,7 +26,7 @@ Edit ``/etc/ssh/sshd_config``. (*Match* section overrides default settings.)
 ::
 
 	PermitRootLogin no
-	Match Address 10.18.0.0/24
+	Match Address 10.19.0.0/24
 		PermitRootLogin yes
 
 Login without password
@@ -100,23 +100,6 @@ Create RAID.
 	# mdadm --create /dev/mdxxx --level=[RAID level] --raid-devices=[# of disks] /dev/sda /dev/sdb ...
 	mdadm --create /dev/md127 --level=0 --raid-devices=2 /dev/sda /dev/sdb
 
-Ansible
-=======
-
-Ansible is a tool to efficiently manage multiple cluster nodes at the same time.
-
-Install from yum.
-::
-
-	yum install ansible
-
-Configuration file: ``/etc/ansible/hosts``.
-::
-
-	[worker]
-	node1 ansible_ssh_host=10.18.0.1
-	node2 ansible_ssh_host=10.18.0.2
-
 Clustershell
 ============
 
@@ -130,9 +113,11 @@ Install from yum.
 Cluster node group configuration file: ``/etc/clustershell/groups.d/local.cfg``.
 ::
 
-	all: art[1-4]
-	master: art1
-	worker: art[2-4]
+	all: qct[1-10]
+	master: qct1
+	worker: qct[2-10]
+	cpu: qct[1-4]
+	gpu: qct[9-10]
 
 To execute a command for certain group, run
 ::
@@ -141,6 +126,6 @@ To execute a command for certain group, run
 	clush -w @worker -b --diff "rpm -qa | sort"
 
 
-* ``-b`` buffers output from each node, output all results after all nodes finish execution. 
+* ``-b`` buffers output from each node, output all results after all nodes finish execution.
 * ``--diff`` can compare the results of each node.
 * ``-L`` will show outputs in the order of machines' name.

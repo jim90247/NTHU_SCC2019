@@ -14,7 +14,7 @@ First we disable ``NetworkManager`` and ``firewalld``. This can reduce unnecessa
 
 	systemctl disable NetworkManager --now
 	systemctl disable firewalld --now
-	
+
 ifconfig
 ========
 
@@ -30,20 +30,18 @@ The following changes are required. For the remaining settings, it's up to you.
 	BROWSER_ONLY=no
 	BOOTPROTO=static
 	DEFROUTE=yes
-	NAME=enp1s0f1
-	IPADDR0=<public IP>
-	IPADDR1="10.18.0.1"
-	PREFIX0=24
-	PREFIX1=24
-	GATEWAY=<gateway>
+	NAME=<interface name>
+	IPADDR=10.19.0.1
+	PREFIX=24
+	GATEWAY=10.19.0.1
 	DNS1=8.8.8.8
 	ONBOOT=yes
 
-For worker nodes, you might not need public IP setting.
+For master node, you might not need GATEWAY IP setting.
 
 .. note::
 	Make sure all nodes' IP are distinct.
-	
+
 Activate
 ^^^^^^^^
 
@@ -52,7 +50,7 @@ Enable and start the system service.
 
 	systemctl enable network
 	systemctl restart network
-	
+
 systemd-networkd
 ================
 
@@ -71,34 +69,36 @@ Edit configuration file ``/etc/systemd/network/<device>.network``, where ``<devi
 
 	[Match]
 	Name=<device>
-	
+
 	[Network]
-	Address=<public IP>/24
-	Address=10.18.0.1/24
-	Gateway=<gateway>
+	Address=10.19.0.1/24
+	Gateway=10.19.0.1
 	DNS=8.8.8.8
-	
-For worker nodes, you might not need public IP setting. 
+	IPForward=ipv4
+
+For master node, you might not need ``Gateway`` IP setting.
+
+For worker node, you don't need ``IPForward`` setting.
 
 .. important::
 	The ``<device>`` in file name can be anything, but the ``<device>`` in configuration file must be the same as network interface name. You can find it using command ``ip link``.
-	
-	
+
+
 Activate
 ^^^^^^^^
 
 Enable and start ``systemd-resolved``.
 ::
-	
+
 	systemctl enable systemd-resolved --now
 	rm -f /etc/resolv.conf
-	ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf	
+	ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 Enable and start ``systemd-networkd``.
 ::
 
 	systemctl enable systemd-networkd --now
-	
+
 
 NAT
 ===
@@ -108,27 +108,8 @@ After setting up the network, you might found that worker nodes cannot access in
 .. important::
 	Perform following operations on **master node** only.
 
-firewalld
-^^^^^^^^^
-	
-Start ``firewalld`` service.
-::
-
-	systemctl enable firewalld --now
-	
-Add firewall rules.
-::
-
-	firewall-cmd --set-default-zone=external
-	firewall-cmd --permanent --zone=external --change-interface=enp1s0f1
-	firewall-cmd --permanent --zone=external --change-interface=enp1s0f1:0
-	firewall-cmd --permanent --zone=trusted --add-source=10.18.0.0/24
-	firewall-cmd --permanent --zone=trusted --add-source=10.18.18.0/24 # IPoIB
-	
 nftables
 ^^^^^^^^
-
-This is an alternative method of using ``firewalld``.
 
 Install ``nftables``.
 ::
@@ -143,26 +124,28 @@ Add SNAT (source NAT) rules.
 	nft add table nat
 	nft add chain nat prerouting { type nat hook prerouting priority 0 \; }
 	nft add chain nat postrouting { type nat hook postrouting priority 100 \; }
-	
+
 	# add rule
-	nft add rule nat postrouting ip saddr 10.18.0.0/24 oif enp1s0f1 snat <public IP>
+	nft add rule nat postrouting ip saddr 10.19.0.0/24 oif enp1s0f1 snat <public IP>
 
 Make settings become permanent.
 ::
 
 	systemctl enable nftables --now
-	
+
 	# After configuring above rules
 	nft list ruleset >> /etc/sysconfig/nftables.conf
 
 sysctl
 ^^^^^^
 
+If you already set ``IPForward`` in systemd-networkd configuration file, you may skip this step.
+
 Add ``net.ipv4.ip_forward=1`` into ``/etc/sysctl.conf``. Then do
 ::
 
 	sysctl -p
-	
+
 to reload sysctl settings.
 
 .. note::

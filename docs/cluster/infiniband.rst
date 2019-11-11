@@ -48,7 +48,7 @@ Check InfiniBand status.
 	ibstat
 	# State: Active
 	# Physical state: LinkUp
-	
+
 	ibstatus
 
 IPoIB
@@ -68,11 +68,11 @@ Create a ifconfig script in ``/etc/sysconfig/network/scripts``.
 	NAME=ib0
 	DEVICE=ib0
 	ONBOOT=yes
-	IPADDR=10.18.18.1
+	IPADDR=10.19.1.1
 	PREFIX=24
 	CONNECTED_MODE=yes
 	MTU=65520
-	
+
 Here we enable **connected mode** to maximize performance.
 
 Restart network.
@@ -90,7 +90,7 @@ Create a config file in ``/etc/systemd/network``.
 	Name=ib0
 
 	[Network]
-	Address=10.18.18.1/24
+	Address=10.19.1.1/24
 
 Restart ``systemd-networkd``.
 ::
