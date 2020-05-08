@@ -14,7 +14,7 @@ First we disable ``NetworkManager`` and ``firewalld``. This can reduce unnecessa
 
 	systemctl disable NetworkManager --now
 	systemctl disable firewalld --now
-	
+
 ifconfig
 ========
 
@@ -43,7 +43,7 @@ For worker nodes, you might not need public IP setting.
 
 .. note::
 	Make sure all nodes' IP are distinct.
-	
+
 Activate
 ^^^^^^^^
 
@@ -52,7 +52,7 @@ Enable and start the system service.
 
 	systemctl enable network
 	systemctl restart network
-	
+
 systemd-networkd
 ================
 
@@ -167,3 +167,63 @@ to reload sysctl settings.
 
 .. note::
 	If NAT is not working and ``libvirtd`` is enabled, try disabling ``libvirtd`` (it uses iptables).
+
+Firewall
+========
+
+Control firewalld settings to allow/block connections.
+
+Enable and start ``firewalld`` service.
+::
+
+  systemctl enable firewalld --now
+
+Query current configurations.
+::
+
+  firewall-cmd --list-all
+
+Query active zones of each network interface.
+::
+
+  firewall-cmd --get-active-zones
+
+Query predefined services.
+::
+
+  firewall-cmd --get-services
+
+Add a predefined service into some zone.
+::
+
+  firewall-cmd --zone=<zone> [--permanent] --add-service=<service>
+
+Query permanent services of some zone.
+::
+
+  firewall-cmd --zone=<zone> --permanent --list-serivces
+
+Open custom ports (ports not included in predefined services).
+::
+
+  firewall-cmd --zone=<zone> [--permanent] --add-port=X[-Y]/<protocol>
+  # example: firewall-cmd --zone=public --add-port=8080/tcp
+  # example 2: firewall-cmd --zone=public --add-port=4990-4999/udp
+
+Remove opened services/port.
+::
+
+  firewall-cmd --zone=<zone> [--permanent] --remove-service=<service>
+  firewall-cmd --zone=<zone> [--permanent] --remove-port=<port>/<protocol>
+
+Allow specific IPs to access certain services.
+::
+
+  firewall-cmd --zone=<zone> [--permanent] \
+    --add-rich-rule 'rule family="ipv4" source address="<IP>/<mask>" service name="<service>" accept'
+
+Add specific IPs to white list (allow connection to all ports).
+::
+
+  firewall-cmd --zone=<zone> [--permanent] \
+    --add-rich-rule='rule family="ipv4" source address="<IP>/<mask>" accept'
