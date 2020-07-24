@@ -34,7 +34,7 @@ This repository contains packages newer than CentOS-Base repository. (e.g. tmux2
 
 ::
 
-	yum install https://centos7.iuscommunity.org/ius-release.rpm
+	yum install https://repo.ius.io/ius-release-el7.rpm
 
 Local repository
 ================
